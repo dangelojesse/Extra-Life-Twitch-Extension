@@ -1,0 +1,210 @@
+:root {
+  --green: #7fd836;
+  --light-blue: #26c2eb;
+  --blue: #4074c2;
+  --dark-blue: #1a4c6d;
+  --twitch-border: #2c2541;
+  --twitch-bg: #17141f;
+  --polygon: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+}
+
+@font-face {
+  font-family: 'furoreregular';
+  font-style: normal;
+  font-weight: normal;
+  src: url('furore-regular-webfont.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'cantarell';
+  font-style: normal;
+  font-weight: normal;
+  src: url('cantarell-regular-webfont.woff') format('woff');
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--twitch-bg);
+  margin: 0;
+  padding: 0;
+}
+
+.extra-life {
+  align-items: center;
+  background-image: linear-gradient(45deg, var(--blue), var(--dark-blue));
+  border: 5px solid var(--green);
+  display: flex;
+  flex-direction: column;
+  margin-left: 5px;
+  width: calc(100vw - 10px);
+}
+
+.extra-life.extra-life--viewer {
+  height: calc(100vh - 40px);
+  margin-top: 35px;
+}
+
+.extra-life.extra-life--config {
+  align-items: center;
+  height: 100vh;
+  justify-content: center;
+}
+
+.extra-life__image-container {
+  position: relative;
+  align-items: center;
+  background: var(--green);
+  clip-path: var(--polygon);
+  display: flex;
+  height: 120px;
+  justify-content: center;
+  margin-top: -40px;
+  width: 120px;
+  z-index: 1;
+}
+
+.extra-life__image-container:before {
+  background: #fff;
+  clip-path: var(--polygon);
+  content: ' ';
+  display: block;
+  height: 110px;
+  position: relative;
+  width: 110px;
+  position: absolute;
+  top: 5px;
+  left: 5px;
+}
+
+.extra-life__participant_image {
+  clip-path: var(--polygon);
+  height: 100px;
+  margin: 10px;
+  width: 100px;
+}
+
+.extra-life__logo {
+  margin-top: -5px;
+  max-width: 250px;
+}
+
+.extra-life__year {
+  color: #7fd836;
+  font-family: 'furoreregular';
+  font-size: 36px;
+  margin-top: 30px;
+}
+
+.extra-life__totals {
+  color: #fff;
+  font-family: 'cantarell';
+  font-size: 30px;
+  margin-top: 10px;
+}
+
+.extra-life__progress {
+  background: #fff;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
+  height: 40px;
+  padding: 5px 10px;
+  width: 250px;
+}
+
+.extra-life__progress-percent {
+  align-items: center;
+  background: #7fd836;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
+  color: #1a4c6d;
+  display: flex;
+  float: left;
+  font-family: 'cantarell';
+  font-size: 10px;
+  height: 30px;
+  justify-content: center;
+  line-height: 30px;
+  max-width: 100%;
+  min-width: 40px;
+  text-align: right;
+  transition: width 1s;
+}
+
+.extra-life__donate {
+  background: #26c2eb;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
+  color: white;
+  cursor: pointer;
+  font-family: 'furoreregular';
+  font-size: 30px;
+  height: 50px;
+  line-height: 50px;
+  margin-top: 30px;
+  text-align: center;
+  text-decoration: none;
+  width: 250px;
+}
+
+.extra-life__participant-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.extra-life__participant-form label,
+h1 {
+  color: #7fd836;
+  font-family: 'furoreregular';
+  font-size: 60px;
+}
+
+h1 {
+  display: none;
+}
+
+.extra-life__participant-form [type='text'] {
+  background: none;
+  border: none;
+  border-bottom: 1px solid white;
+  color: #fff;
+  font-family: 'cantarell';
+  font-size: 60px;
+  height: 60px;
+  margin-top: 10px;
+  outline: none;
+  padding-bottom: 20px;
+}
+
+.extra-life__participant-form [type='submit'] {
+  border: 0;
+  outline: none;
+  width: 100%;
+}
+
+p {
+  color: #fff;
+  font-family: 'cantarell';
+  font-style: italic;
+}
+
+[disabled] {
+  opacity: 0.5;
+}
+
+::placeholder {
+  /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: #26c2eb;
+  opacity: 0.5; /* Firefox */
+}
+
+:-ms-input-placeholder {
+  /* Internet Explorer 10-11 */
+  color: #26c2eb;
+  opacity: 0.5;
+}
+
+::-ms-input-placeholder {
+  /* Microsoft Edge */
+  color: #26c2eb;
+  opacity: 0.5;
+}

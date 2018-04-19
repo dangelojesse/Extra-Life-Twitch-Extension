@@ -1,0 +1,31 @@
+{
+  "name": "eltwitchext",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "browserify public/extension.ts -p [ tsify ] > public/static/scripts/bundle.js",
+    "serve": "node app.js"
+  },
+  "devDependencies": {
+    "boom": "7.2.0",
+    "browserify": "16.1.1",
+    "handlebars": "4.0.11",
+    "hapi": "17.3.1",
+    "inert": "5.1.0",
+    "jsonwebtoken": "8.2.1",
+    "path": "^0.12.7",
+    "tsify": "3.0.4",
+    "typescript": "2.8.1"
+  },
+  "dependencies": {
+    "@types/handlebars": "^4.0.36",
+    "@types/jquery": "^3.3.1",
+    "jquery": "3.3.1",
+    "leveldown": "^3.0.0",
+    "levelup": "^2.0.2",
+    "moment": "^2.22.0"
+  },
+  "description": "Extra Life Twitch Extension",
+  "author": "Jesse D'Angelo",
+  "license": "MIT"
+}
