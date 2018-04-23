@@ -88,7 +88,7 @@ function participantQueryHandler(req, h) {
   return result.then(resp => resp);
 }
 
-async function liftOff() {
+function liftOff() {
   server.route({
     method: 'POST',
     path: '/participant/set',
