@@ -18,10 +18,12 @@ const owner = process.env.EXT_OWNER_ID;
 const bearerPrefix = 'Bearer ';
 
 // Certs if running in dev mode.
-const tls = {
-  key: fs.readFileSync('conf/server.key'),
-  cert: fs.readFileSync('conf/server.crt')
-};
+if(!production) {
+  const tls = {
+    key: fs.readFileSync('conf/server.key'),
+    cert: fs.readFileSync('conf/server.crt')
+  };
+}
 
 // create new server instance
 const server = new Hapi.Server({
