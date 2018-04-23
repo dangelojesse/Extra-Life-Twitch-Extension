@@ -4,18 +4,22 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Document</title>
+  <title>Extra Life Twitch Extension Config View</title>
+
+  <link rel="stylesheet" type="text/css" href="./static/styles/styles.css">
 </head>
 <body>
   <script src="https://extension-files.twitch.tv/helper/v1/twitch-ext.min.js"></script>
-  <script id="config-template" type="text/x-handlebars-template">
 
-  <form name="participantForm" id="participantForm">
-    <input type="text" name="participantId" />
-    <input type="submit"></input>
-  </form>
-
-</script>
-  <script type="text/javascript" src="./static/scripts/bundle.js"></script>
+  <div class="extra-life extra-life--config" id="config">
+    <form class="extra-life__participant-form" name="participantForm" id="participantForm">
+      <label>Participant Id</label>
+      <input v-model="participantId" type="text" name="participantId">
+      <input @click="submitForm(participantId)" class="extra-life__button" type="submit">
+    </form>
+  </div>
+  <script type="text/javascript" src="./static/scripts/vendor/vue.min.js"></script>
+  <script type="text/javascript" src="./static/scripts/vendor/axios.min.js"></script>
+  <script type="text/javascript" src="./static/scripts/config.js"></script>
 </body>
 </html>

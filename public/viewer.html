@@ -12,31 +12,31 @@
   <!-- Twitch Extension Helper -->
   <script src="https://extension-files.twitch.tv/helper/v1/twitch-ext.min.js"></script>
 
-  <script id="entry-template" type="text/x-handlebars-template">
-    <div class="extra-life extra-life--viewer">
-      <div class="extra-life__image-container">
-        <img src="https:{{participantImage}}" class="extra-life__participant_image" alt="Extra Life Participant">
-      </div>
-
-      <img src="./static/images/el-logo.png" alt="Extra Life" class="extra-life__logo" />
-
-      <div class="extra-life__year">
-        <span js-hook="year">{{year}}</span>
-        <span>Goal</span>
-      </div>
-
-      <div class="extra-life__progress">
-        <div class="extra-life__progress-percent" style="">{{goalPercent}}</div>
-      </div>
-
-      <div class="extra-life__totals">
-        ${{raised}} / ${{goal}}
-      </div>
-
-      <span class="extra-life__donate">Donate</span>
+  <div class="extra-life extra-life--viewer" id="viewer">
+    <div class="extra-life__image-container">
+      <img :src="'participantImage" class="extra-life__participant_image" alt="Extra Life Participant">
     </div>
-  </script>
 
-  <script type="text/javascript" src="./static/scripts/bundle.js"></script>
+    <img src="./static/images/el-logo.png" alt="Extra Life" class="extra-life__logo" />
+
+    <div class="extra-life__year">
+      <span js-hook="year">{{year}}</span>
+      <span>Goal</span>
+    </div>
+
+    <div class="extra-life__progress">
+      <div class="extra-life__progress-percent" style="">{{goalPercent}}</div>
+    </div>
+
+    <div class="extra-life__totals">
+      ${{raised}} / ${{goal}}
+    </div>
+
+    <span class="extra-life__button">Donate</span>
+  </div>
+
+  <script type="text/javascript" src="./static/scripts/vendor/vue.min.js"></script>
+  <script type="text/javascript" src="./static/scripts/vendor/axios.min.js"></script>
+  <script type="text/javascript" src="./static/scripts/viewer.js"></script>
 </body>
 </html>

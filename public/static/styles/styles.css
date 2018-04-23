@@ -30,6 +30,7 @@ body {
   background-color: var(--twitch-bg);
   margin: 0;
   padding: 0;
+  display: flex;
 }
 
 .extra-life {
@@ -40,6 +41,7 @@ body {
   flex-direction: column;
   margin-left: 5px;
   width: calc(100vw - 10px);
+  flex: 1;
 }
 
 .extra-life.extra-life--viewer {
@@ -50,7 +52,8 @@ body {
 .extra-life.extra-life--config {
   align-items: center;
   height: 100vh;
-  justify-content: center;
+  margin: 0;
+  width: 100%;
 }
 
 .extra-life__image-container {
@@ -131,7 +134,7 @@ body {
   transition: width 1s;
 }
 
-.extra-life__donate {
+.extra-life__button {
   background: #26c2eb;
   box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
   color: white;
@@ -151,15 +154,10 @@ body {
   flex-direction: column;
 }
 
-.extra-life__participant-form label,
-h1 {
+.extra-life__participant-form label {
   color: #7fd836;
   font-family: 'furoreregular';
   font-size: 60px;
-}
-
-h1 {
-  display: none;
 }
 
 .extra-life__participant-form [type='text'] {
