@@ -23245,8 +23245,10 @@ var moment = require("moment");
  * code probably looks a bit crazy.
  * Here is all the good stuff
  **********************************/
-var source = $("#entry-template").html();
-var template = Handlebars.compile(source);
+var viewer = $("#entry-template").html();
+var config = $("#config-template").html();
+var configView = window.location.pathname === '/config.html';
+var template = configView ? Handlebars.compile(config) : Handlebars.compile(viewer);
 var participantDataUrl = 'https://www.extra-life.org/index.cfm?fuseaction=donordrive.participant&participantID=';
 var participantDonateLink = $('extra-life__donate');
 var token = '';
@@ -23265,7 +23267,10 @@ function createRequest(type, method) {
         type: type,
         url: 'https://localhost:8080/participant/' + method,
         success: function (participantId) {
-            run(participantId);
+            console.log(participantId);
+            if (type === 'GET') {
+                run(participantId);
+            }
         },
         error: logError,
         data: {}
@@ -23287,13 +23292,15 @@ twitch.onAuthorized(function (auth) {
     token = auth.token;
     tuid = auth.userId;
     setAuth(token);
-    $.ajax(requests.get);
+    if (!configView) {
+        $.ajax(requests.get);
+    }
 });
 function getYear() {
     return moment().year();
 }
-function getData() {
-    return fetch(participantDataUrl + 296948 + '&format=json').then(function (response) {
+function getData(participantId) {
+    return fetch("" + participantDataUrl + participantId + "&format=json").then(function (response) {
         return response.json();
     });
 }
@@ -23301,27 +23308,33 @@ function calcPercent(current, goal) {
     return Math.round(current / goal * 100 * 10) / 10 + '%';
 }
 function run(participantId) {
-    if (updateForeverAndEver) {
-        clearInterval(updateForeverAndEver);
-    }
-    getData().then(function (participant) {
-        var viewerData = {
-            year: getYear(),
-            participantImage: participant.avatarImageURL,
-            raised: participant.totalRaisedAmount,
-            goal: participant.fundraisingGoal,
-            goalPercent: calcPercent(participant.totalRaisedAmount, participant.fundraisingGoal)
-        };
-        participantDonateLink.on('click', function () {
-            window.open(participantDataUrl + participant.participantID, '_blank');
+    if (!configView) {
+        if (updateForeverAndEver) {
+            clearInterval(updateForeverAndEver);
+        }
+        getData(participantId).then(function (participant) {
+            var viewerData = {
+                year: getYear(),
+                participantImage: participant.avatarImageURL,
+                raised: participant.totalRaisedAmount,
+                goal: participant.fundraisingGoal,
+                goalPercent: calcPercent(participant.totalRaisedAmount, participant.fundraisingGoal)
+            };
+            participantDonateLink.on('click', function () {
+                window.open(participantDataUrl + participant.participantID, '_blank');
+            });
+            participantDonateLink.off('click');
+            $('body').html(template(viewerData));
         });
-        participantDonateLink.off('click');
-        $('body').html(template(viewerData));
-    });
-    updateForeverAndEver = setInterval(function () {
-        run(participantId);
-    }, 60000);
+        updateForeverAndEver = setInterval(function () {
+            run(participantId);
+        }, 60000);
+    }
+    else {
+    }
+    ;
 }
+;
 function logError(_, error, status) {
     twitch.rig.log('EBS request returned ' + status + ' (' + error + ')');
 }

@@ -11,8 +11,11 @@ import moment = require('moment');
  * Here is all the good stuff
  **********************************/
 
-  const source = $("#entry-template").html();
-  const template = Handlebars.compile(source);
+  const viewer = $("#entry-template").html();
+  const config = $("#config-template").html();
+  const configView = window.location.pathname === '/config.html';
+  const template = configView ? Handlebars.compile(config) : Handlebars.compile(viewer);
+
   const participantDataUrl = 'https://www.extra-life.org/index.cfm?fuseaction=donordrive.participant&participantID=';
   const participantDonateLink = $('extra-life__donate');
 
@@ -35,8 +38,11 @@ import moment = require('moment');
     return {
       type: type,
       url: 'https://localhost:8080/participant/' + method,
-      success: function(participantId) {
+      success: (participantId) => {
+        console.log(participantId);
+        if(type === 'GET'){
         run(participantId);
+        }
       },
       error: logError,
       data: {}
@@ -61,15 +67,18 @@ import moment = require('moment');
     token = auth.token;
     tuid = auth.userId;
     setAuth(token);
+
+    if(!configView) {
     $.ajax(requests.get);
+    }
   });
 
 function getYear(): number {
   return moment().year();
 }
 
-function getData() {
-  return fetch(participantDataUrl + 296948 + '&format=json').then(function(response) {
+function getData(participantId) {
+  return fetch(`${participantDataUrl}${participantId}&format=json`).then(function(response) {
     return response.json();
   });
 }
@@ -79,11 +88,13 @@ function calcPercent(current: number, goal: number): string {
 }
 
 function run(participantId) {
+  if(!configView) {
+
   if (updateForeverAndEver) {
     clearInterval(updateForeverAndEver);
   }
 
-  getData().then(function(participant: Participant) {
+    getData(participantId).then(function(participant: Participant) {
     let viewerData:ViewerData = {
       year: getYear(),
       participantImage: participant.avatarImageURL,
@@ -97,14 +108,15 @@ function run(participantId) {
     });
 
     participantDonateLink.off('click');
-
     $('body').html(template(viewerData));
   });
-
   updateForeverAndEver = setInterval(function() {
     run(participantId);
   }, 60000);
-}
+  } else {
+
+  };
+};
 
 function logError(_, error, status) {
   twitch.rig.log('EBS request returned ' + status + ' (' + error + ')');

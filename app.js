@@ -3,8 +3,8 @@ const Path = require('path');
 const fs = require('fs');
 const jwt = require('jsonwebtoken');
 const Boom = require('boom');
-var levelup = require('levelup');
-var leveldown = require('leveldown');
+let levelup = require('levelup');
+let leveldown = require('leveldown');
 
 // Determine if Production or Dev
 const production = process.env.NODE_ENV === 'production';
@@ -62,35 +62,30 @@ function participantHandler(req, h) {
     throw Boom.unauthorized('invalid jwt');
   }
 
-  const channelId = payload.channel_id;
-  console.log(payload);
-  db.put(channelId, req.payload.participantId, function (err) {
-  console.log(`
-    Wah!
-    ${err} failed to save to database, please try again.`);
-  });
+  const channelId = payload.channel_id.toString();
+  const participantId = req.payload.participantId.toString();
 
-  return channelId;
+  db.batch()
+    .del(channelId)
+    .put(channelId, participantId);
+
+  return {};
 }
 
 function participantQueryHandler(req, h) {
+
   const payload = verifyAndDecode(req.headers.authorization);
 
   if (!payload) {
     throw Boom.unauthorized('invalid jwt');
   }
 
-  const channelId = payload.channel_id;
 
-  db.get(channelId, function (err, value) {
-    console.log(`
-      Wah!
-      ${err} failed to get data from the database, please try again.`);
+  const channelId = payload.channel_id.toString();
 
-    return value;
-  });
+  let result = db.get(channelId);
 
-  return 'yay'
+  return result.then(resp => resp);
 }
 
 async function liftOff() {
@@ -156,7 +151,6 @@ async function liftOff() {
     });
   }
   await server.start();
-  console.log('Server started at: ' + server.info.uri);
 }
 
 liftOff();
