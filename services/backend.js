@@ -33,9 +33,6 @@ const server = new Hapi.Server({
   routes: {
     files: {
       relativeTo: Path.join(__dirname, 'public')
-    },
-    cors: {
-      origin: ['*']
     }
   }
 });
@@ -64,39 +61,30 @@ function participantHandler(req, h) {
     throw Boom.unauthorized('invalid jwt');
   }
 
-  const channelId = payload.channel_id.toString();
-  const participantId = req.payload.participantId.toString();
+  const requestPayload = JSON.parse(req.payload);
+  const channelId = 'channelID' + payload.channel_id;
+  const participantId = requestPayload.participantId;
 
-  console.log(`
-  --------------------------------
-  ********************************
-  channelID = ${channelId}
-  participantId = ${participantId}
-  ********************************
-  --------------------------------
-  `);
-  console.log(req.payload);
-
-  db.batch()
-    .del(channelId)
-    .put(channelId, participantId);
+  db.put(channelId, participantId, function(err) {
+   if(!!err){
+	console.log('Error: ' + err);
+}
+  });
 
   return {};
 }
 
 function participantQueryHandler(req, h) {
-
   const payload = verifyAndDecode(req.headers.authorization);
 
   if (!payload) {
     throw Boom.unauthorized('invalid jwt');
   }
 
-
-  const channelId = payload.channel_id.toString();
-
-  let result = db.get(channelId);
-
+  const channelId = 'channelID' + payload.channel_id;
+ console.log(channelId);
+  let result = db.get(channelId, {asBuffer: false});
+  
   return result.then(resp => resp);
 }
 
