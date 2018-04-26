@@ -8,6 +8,7 @@ let config = new Vue({
 });
 
 let instance;
+let token;
 
 twitch.onContext(function(context) {
   twitch.rig.log(context);
@@ -15,21 +16,22 @@ twitch.onContext(function(context) {
 
 twitch.onAuthorized(function(auth) {
   // save our credentials
-  token = auth.token;
-  tuidt = auth.userId;
-
-  instance = axios.create({
-    baseURL: 'https://localhost:8081',
-    headers: {'Authorization': 'Bearer ' + token}
-  });
+  token = `Bearer${auth.token}`;
 });
 
-
 function submitForm(participantId) {
-  instance.post(`/participant/set/${participantId}`).then(function (response) {
-    console.log(response);
+  postData(`https://api.extralifetwitchextension.com/participant/set?participantId=${participantId}`)
+    .then(data => console.log(data))
+    .catch(error => console.error(error));
+}
+
+function postData(url) {
+  return fetch(url, {
+    headers: {
+      'Authorization':token,
+    },
+    method: 'POST',
+    mode: 'no-cors',
   })
-  .catch(function (error) {
-    console.log(error);
-  });
+  .then(response => response.json()) // parses response to JSON
 }

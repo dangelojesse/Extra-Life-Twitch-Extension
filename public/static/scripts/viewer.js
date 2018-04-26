@@ -30,16 +30,17 @@ twitch.onAuthorized(function(auth) {
   token = auth.token;
   tuidt = auth.userId;
 
-  instance = axios.create({
-    baseURL: 'https://localhost:8081',
-    headers: {'Authorization': 'Bearer ' + token}
-  });
-
-  axios.get('/participant/get');
+  fetch('https://api.extralifetwitchextension.com/participant/get', {
+    headers: new Headers({
+      'Authorization': 'Bearer ' + token
+    })
+  }).then(response => {
+      return run(response);
+  }).catch(error => console.error('Error:', error))
+    .then(response => console.log('Success:', response));
 });
 
-
-////////////////////////
+//
 function getYear(){
   const rightMeow =  new Date();
 
@@ -48,4 +49,36 @@ function getYear(){
 
 function calcPercent(current, goal) {
   return Math.round(current / goal * 100 * 10) / 10 + '%';
+}
+
+function run(participantId) {
+  if (updateForeverAndEver) {
+    clearInterval(updateForeverAndEver);
+  }
+
+    getData(participantId).then(function(participant) {
+    let viewerData = {
+      year: getYear(),
+      participantImage: participant.avatarImageURL,
+      raised: participant.totalRaisedAmount,
+      goal: participant.fundraisingGoal,
+      goalPercent: calcPercent(participant.totalRaisedAmount, participant.fundraisingGoal)
+    }
+
+    participantDonateLink.on('click', function() {
+      window.open(participantDataUrl + participant.participantID, '_blank');
+    });
+
+    participantDonateLink.off('click');
+    $('body').html(template(viewerData));
+  });
+  updateForeverAndEver = setInterval(function() {
+    run(participantId);
+  }, 60000);
+};
+
+function getData(participantId) {
+  return fetch(`${participantDataUrl}${participantId}&format=json`).then(function(response) {
+    return response.json();
+  });
 }
