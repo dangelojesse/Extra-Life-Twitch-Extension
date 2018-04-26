@@ -64,7 +64,25 @@ function participantHandler(req, h) {
     throw Boom.unauthorized('invalid jwt');
   }
 
+  console.log(`
+  ---------------------
+    PAYLOAD
+  ---------------------
+  `);
+  console.log(payload.channel_id);
   const channelId = payload.channel_id.toString();
+  console.log(`
+  ---------------------
+    req.params
+  ---------------------
+  `);
+  console.log(req.params);
+  console.log(`
+  ---------------------
+    req.payload
+  ---------------------
+  `);
+  console.log(req.payload);
   const participantId = req.params.participantId.toString();
 
   db.batch()

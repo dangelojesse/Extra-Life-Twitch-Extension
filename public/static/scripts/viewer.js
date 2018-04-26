@@ -27,17 +27,21 @@ twitch.onContext(function(context) {
 
 twitch.onAuthorized(function(auth) {
   // save our credentials
-  token = auth.token;
-  tuidt = auth.userId;
+  token = `Bearer ${auth.token}`;
 
   fetch('https://api.extralifetwitchextension.com/participant/get', {
-    headers: new Headers({
-      'Authorization': 'Bearer ' + token
-    })
+    headers: {
+      'Authorization': token
+    }
   }).then(response => {
+      console.log(response);
       return run(response);
-  }).catch(error => console.error('Error:', error))
-    .then(response => console.log('Success:', response));
+  }).catch(function(error) {
+      console.error('Error:', error)
+  })
+    .then(function(response) {
+      console.log('Success:', response)
+  });
 });
 
 //

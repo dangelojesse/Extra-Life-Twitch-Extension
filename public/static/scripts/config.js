@@ -4,6 +4,14 @@ let config = new Vue({
   el: '#config',
   data: {
     participantId: null
+  },
+  methods: {
+    submitForm: function(participantId) {
+      console.log(participantId);
+      postData(`https://api.extralifetwitchextension.com/participant/set?participantId=${participantId}`)
+        .then(function(data) {console.log(data)})
+        .catch(function(error) {console.error(error)});
+    }
   }
 });
 
@@ -16,22 +24,15 @@ twitch.onContext(function(context) {
 
 twitch.onAuthorized(function(auth) {
   // save our credentials
-  token = `Bearer${auth.token}`;
+  token = `Bearer ${auth.token}`;
 });
-
-function submitForm(participantId) {
-  postData(`https://api.extralifetwitchextension.com/participant/set?participantId=${participantId}`)
-    .then(data => console.log(data))
-    .catch(error => console.error(error));
-}
 
 function postData(url) {
   return fetch(url, {
     headers: {
-      'Authorization':token,
+      'Authorization': token,
     },
-    method: 'POST',
-    mode: 'no-cors',
+    method: 'POST'
   })
-  .then(response => response.json()) // parses response to JSON
+  .then(function(response) {response.json()}); // parses response to JSON
 }
