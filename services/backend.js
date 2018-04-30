@@ -61,9 +61,15 @@ function participantHandler(req, h) {
     throw Boom.unauthorized('invalid jwt');
   }
 
-  const requestPayload = JSON.parse(req.payload);
+  console.log(`
+  ########################################
+  Extra Life: ${req.payload.participantId}
+  Twitch: ${payload.channel_id}
+  #########################################
+  `);
+
   const channelId = 'channelID' + payload.channel_id;
-  const participantId = requestPayload.participantId;
+  const participantId = req.payload.participantId;
 
   db.put(channelId, participantId, function(err) {
    if(!!err){
@@ -82,7 +88,10 @@ function participantQueryHandler(req, h) {
   }
 
   const channelId = 'channelID' + payload.channel_id;
- console.log(channelId);
+ console.log(`
+  =======================================
+  ${channelId}
+  ========================================`);
   let result = db.get(channelId, {asBuffer: false});
   
   return result.then(resp => resp);
