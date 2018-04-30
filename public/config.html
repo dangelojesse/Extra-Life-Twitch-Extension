@@ -12,14 +12,14 @@
   <script src="https://extension-files.twitch.tv/helper/v1/twitch-ext.min.js"></script>
 
   <div class="extra-life extra-life--config" id="config">
-    <form class="extra-life__participant-form" name="participantForm" id="participantForm">
+    <form class="extra-life__participant-form" name="participantForm" hook="form" id="participantForm">
       <label>Participant Id</label>
-      <input v-model="participantId" type="text" name="participantId" autocomplete="false" />
-      <button type="button" @click="submitForm(participantId)" class="extra-life__button">Submit</button>
+      <input type="text" hook="input" name="participantId" autocomplete="false" />
+      <button type="submit" class="extra-life__button">Submit</button>
     </form>
   </div>
 
-  <script type="text/javascript" src="./static/scripts/vendor/vue.min.js"></script>
+  <script type="text/javascript" src="./static/scripts/vendor/jquery.min.js"></script>
   <script type="text/javascript" src="./static/scripts/config.js"></script>
 
 </body>

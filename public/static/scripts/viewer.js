@@ -1,88 +1,182 @@
-const participantDataUrl = 'https://www.extra-life.org/index.cfm?fuseaction=donordrive.participant&participantID=';
-const twitch = window.Twitch.ext;
+(function() {
+  const participantIdUrl = 'https://api.extralifetwitchextension.com/participant/get';
+  const twitch = window.Twitch.ext;
+  let updateForeverAndEver;
+  let initialLoop = true;
+  let participant;
 
-let viewer = new Vue({
-  el: '#viewer',
-  data: {
-    goal: 1,
-    total: 1,
-    participantImage: './static/images/avatar-constituent-default.gif',
-    year: getYear(),
-    goalPercent: 50,
-    raised: 1,
-  }
-});
-
-let updateForeverAndEver;
-
-let instance;
-
-let token = '';
-let tuid = '';
-let ebs = '';
-
-twitch.onContext(function(context) {
-  twitch.rig.log(context);
-});
-
-twitch.onAuthorized(function(auth) {
-  // save our credentials
-  token = `Bearer ${auth.token}`;
-
-  fetch('https://api.extralifetwitchextension.com/participant/get', {
-    headers: {
-      'Authorization': token
-    }
-  }).then(response => {
-      console.log(response);
-      return run(response);
-  }).catch(function(error) {
-      console.error('Error:', error)
-  })
-    .then(function(response) {
-      console.log('Success:', response)
+  $(function() {
+    loading(true);
+    twitch.onAuthorized(function(auth) {
+      const token = `Bearer ${auth.token}`;
+      start(token);
+    });
   });
-});
 
-//
-function getYear(){
-  const rightMeow =  new Date();
-
-  return rightMeow.getFullYear();
-}
-
-function calcPercent(current, goal) {
-  return Math.round(current / goal * 100 * 10) / 10 + '%';
-}
-
-function run(participantId) {
-  if (updateForeverAndEver) {
-    clearInterval(updateForeverAndEver);
+  function start(token) {
+    getCurrentParticipant(token)
+      .done(response => {
+        getExtraLifeParticipant(response)
+          .done(response => {
+            fetchedParticipant(response);
+          })
+          .fail(error => console.warn(`Error getting Extra Life Data: ${error}`));
+      })
+      .fail(error => console.warn(`Error getting current participant ID: ${error}`));
   }
 
-    getData(participantId).then(function(participant) {
-    let viewerData = {
-      year: getYear(),
-      participantImage: participant.avatarImageURL,
-      raised: participant.totalRaisedAmount,
-      goal: participant.fundraisingGoal,
-      goalPercent: calcPercent(participant.totalRaisedAmount, participant.fundraisingGoal)
-    }
+  function fetchedParticipant(fetchedParticipant) {
+    participant = fetchedParticipant;
+    setUI();
+    repeatUI()
 
-    participantDonateLink.on('click', function() {
-      window.open(participantDataUrl + participant.participantID, '_blank');
+    if(initialLoop) {
+      loading(false);
+      initialLoop = false;
+    }
+  }
+
+  function setUI() {
+    const donationUrl = `https://www.extra-life.org/index.cfm?fuseaction=donate.participant&participantID=${participant.participantID}`;
+    const calculatedPercent = calcPercent(participant.totalRaisedAmount, participant.fundraisingGoal);
+    const link = $('[hook=link]');
+
+    link.off('click').on('click', () => {
+      window.open(donationUrl, '_blank');
     });
 
-    participantDonateLink.off('click');
-    $('body').html(template(viewerData));
-  });
-  updateForeverAndEver = setInterval(function() {
-    run(participantId);
-  }, 60000);
-};
+    setText('totalRaisedAmount', participant.totalRaisedAmount);
+    setText('fundraisingGoal', participant.fundraisingGoal);
+    setText('year', getCurrentYear());
+    setText('goalPercent', calculatedPercent);
+    setAttribute('goalPercent', 'style', `width: ${calculatedPercent}`);
+    setAttribute('avatarImageURL', 'src', `https:${participant.avatarImageURL}`);
+  }
 
-function getData(participantId) {
-  return fetch(`${participantDataUrl}${participantId}&format=json`).then(function(response) {
-    return response.json();
-  });
-}
+  /**
+   * @desc
+   * Simple function that repeats the API call to retrieve
+   * the Extra Life data and performs a series of actions
+   * via the fetchedParticipant() function.
+   */
+  function repeatUI() {
+    if (updateForeverAndEver) {
+      clearInterval(updateForeverAndEver);
+    }
+
+    updateForeverAndEver = setInterval(() => {
+      getExtraLifeParticipant(participant.participantID)
+        .done(response => {
+          fetchedParticipant(response);
+        })
+        .fail(error => console.warn('Error:', error));
+    }, 60000);
+  }
+
+  /**
+   * @desc
+   * Displays the loading animation until specifed.
+   *
+   * @example
+   * loading(true);
+   *
+   * @param status {boolean}
+   */
+  function loading(status) {
+    if(status) {
+      $('.extra-life').hide();
+      $('.extra-life--loading').show();
+      return;
+    }
+    $('.extra-life').show();
+    $('.extra-life--loading').hide();
+    return;
+  }
+
+  /**
+   * @desc
+   * Simple function to set the value of an attribute
+   * that use the custom hook attribute.
+   *
+   * @param {*} hook The name of the hook attribute in template
+   * @param {*} attr The attribute you wish to modify
+   * @param {*} setting desired value of attribute.
+   *
+   * @example
+   * setAttribute('test', 'style', 'color:red');
+   *
+   * @return Void
+   */
+  function setAttribute(hook, attr, setting) {
+    $(`[hook=${hook}]`).attr(attr, setting);
+  }
+
+  /**
+   * @desc
+   * Simple function to set the text of attributes
+   * that use the custom hook attribute.
+   *
+   * @param {string} hook The name of the hook attribute in template
+   * @param {string} content desired text to be inserted in the html
+   *
+   * @example
+   * setText('test', 'Cool Text');
+   *
+   * @return Void
+   */
+  function setText(hook, content) {
+    $(`[hook=${hook}]`).text(content);
+  }
+
+  /**
+   * @desc
+   * Returns the Current Year
+   *
+   * @return {string}
+   */
+  function getCurrentYear() {
+    const rightMeow = new Date().getFullYear();
+
+    return rightMeow.toString();
+  }
+
+  /**
+   * @desc
+   * Uses the fundraising total and fundraising goal to calculate the
+   * current progress towards the participants fundraising
+   *
+   * @param {number} total Current Fundraising Total.
+   * @param {number} goal Fundraising Goal.
+   *
+   * @example
+   * calcPercent(10, 100);
+   *
+   * @return {string} Progress towards the current Extra Life Goal
+   */
+  function calcPercent(total, goal) {
+    return Math.round(total / goal * 100 * 10) / 10 + '%';
+  }
+
+  /**
+   * @description
+   * Makes an API call to the backend server to retrieve
+   * the participant ID.
+   *
+   * @param {string} token provided upon twitch.onAuthorized
+   */
+  function getCurrentParticipant(token) {
+    return $.ajax({
+      url: `https://api.extralifetwitchextension.com/participant/get`,
+      headers: {
+        'Authorization': token
+      }
+    });
+  }
+
+  function getExtraLifeParticipant(participantId) {
+    const extraLifeParticipantUrl = `https://www.extra-life.org/index.cfm?fuseaction=donordrive.participant&participantID=${participantId}&format=json`;
+    return $.ajax({
+      url: extraLifeParticipantUrl
+    });
+  }
+})();

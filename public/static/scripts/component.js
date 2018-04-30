@@ -1,36 +1,20 @@
 (function() {
-  const setParticipantUrl = 'https://api.extralifetwitchextension.com/participant/set';
   const twitch = window.Twitch.ext;
 
   $(function() {
-    var participantId = $('[hook=input');
-
     twitch.onAuthorized(function(auth) {
       const token = `Bearer ${auth.token}`;
 
       getCurrentParticipant(token)
         .done(response => {
-          participantId.val(response);
+          const donationUrl = `https://www.extra-life.org/index.cfm?fuseaction=donate.participant&participantID=${response}`;
+          const link = $('[hook=component]');
+
+          link.off('click').on('click', () => {
+            window.open(donationUrl, '_blank');
+          });
         })
         .fail(error => console.warn(`Error getting current participant ID: ${error}`));
-
-      $('[hook=form]').submit((event) => {
-        event.preventDefault();
-
-        postData(setParticipantUrl, {
-          participantId: participantId.val()
-        })
-      });
-
-      function postData(url, data) {
-        return $.ajax(url, {
-          data: data,
-          headers: {
-            'Authorization': token,
-          },
-          method: 'POST'
-        });
-      }
     });
   });
 

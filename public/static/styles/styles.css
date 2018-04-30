@@ -4,7 +4,6 @@
   --blue: #4074c2;
   --dark-blue: #1a4c6d;
   --twitch-border: #2c2541;
-  --twitch-bg: #17141f;
   --polygon: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
 }
 
@@ -27,10 +26,9 @@
 }
 
 body {
-  background-color: var(--twitch-bg);
+  display: flex;
   margin: 0;
   padding: 0;
-  display: flex;
 }
 
 .extra-life {
@@ -38,26 +36,31 @@ body {
   background-image: linear-gradient(45deg, var(--blue), var(--dark-blue));
   border: 5px solid var(--green);
   display: flex;
-  flex-direction: column;
-  margin-left: 5px;
-  width: calc(100vw - 10px);
   flex: 1;
+  flex-direction: column;
+  width: 100vw;
+}
+
+.extra-life.extra-life--component {
+  background: transparent;
+  border: none;
+  height: 100vh;
+  justify-content: center;
+  width: 100vw;
+  cursor: pointer;
 }
 
 .extra-life.extra-life--viewer {
-  height: calc(100vh - 40px);
+  height: calc(100vh - 35px);
   margin-top: 35px;
 }
 
 .extra-life.extra-life--config {
   align-items: center;
   height: 100vh;
-  margin: 0;
-  width: 100%;
 }
 
 .extra-life__image-container {
-  position: relative;
   align-items: center;
   background: var(--green);
   clip-path: var(--polygon);
@@ -65,6 +68,7 @@ body {
   height: 120px;
   justify-content: center;
   margin-top: -40px;
+  position: relative;
   width: 120px;
   z-index: 1;
 }
@@ -75,11 +79,11 @@ body {
   content: ' ';
   display: block;
   height: 110px;
+  left: 5px;
   position: relative;
-  width: 110px;
   position: absolute;
   top: 5px;
-  left: 5px;
+  width: 110px;
 }
 
 .extra-life__participant_image {
@@ -149,6 +153,20 @@ body {
   width: 250px;
 }
 
+.extra-life__button.extra-life__button--component {
+  font-size: 90px;
+  height: 150px;
+  line-height: 150px;
+  opacity: 0;
+  width: 50%;
+  transition: opacity .25s ease-in-out;
+}
+
+.extra-life--component:hover .extra-life__button--component {
+  opacity: 1;
+}
+
+
 .extra-life__participant-form {
   display: flex;
   flex-direction: column;
@@ -179,6 +197,10 @@ body {
   width: 100%;
 }
 
+.extra-life__controller {
+  max-width: 50%;
+}
+
 p {
   color: #fff;
   font-family: 'cantarell';
@@ -205,4 +227,47 @@ p {
   /* Microsoft Edge */
   color: #26c2eb;
   opacity: 0.5;
+}
+
+.extra-life--loading {
+  align-items: center;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  justify-content: center;
+  width: 100vw;
+}
+
+.lds-ripple {
+  display: inline-block;
+  height: 64px;
+  position: relative;
+  width: 64px;
+}
+.lds-ripple div {
+  animation: lds-ripple 1s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+  border: 4px solid #fff;
+  border-radius: 50%;
+  opacity: 1;
+  position: absolute;
+}
+.lds-ripple div:nth-child(2) {
+  animation-delay: -0.5s;
+}
+@keyframes lds-ripple {
+  0% {
+    height: 0;
+    left: 28px;
+    opacity: 1;
+    top: 28px;
+    width: 0;
+  }
+  100% {
+    height: 58px;
+    left: -1px;
+    opacity: 0;
+    top: -1px;
+    width: 58px;
+  }
 }
