@@ -4,11 +4,15 @@
   --blue: #4074c2;
   --dark-blue: #1a4c6d;
   --twitch-border: #2c2541;
+  --white: #fff;
   --polygon: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  --furore: 'furore';
+  --cantarell: 'cantarell';
+  --box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
 }
 
 @font-face {
-  font-family: 'furoreregular';
+  font-family: 'furore';
   font-style: normal;
   font-weight: normal;
   src: url('furore-regular-webfont.woff') format('woff');
@@ -44,10 +48,10 @@ body {
 .extra-life.extra-life--component {
   background: transparent;
   border: none;
+  cursor: pointer;
   height: 100vh;
   justify-content: center;
   width: 100vw;
-  cursor: pointer;
 }
 
 .extra-life.extra-life--viewer {
@@ -74,7 +78,7 @@ body {
 }
 
 .extra-life__image-container:before {
-  background: #fff;
+  background: var(--white);
   clip-path: var(--polygon);
   content: ' ';
   display: block;
@@ -99,22 +103,22 @@ body {
 }
 
 .extra-life__year {
-  color: #7fd836;
-  font-family: 'furoreregular';
+  color: var(--green);
+  font-family: var(--furore);
   font-size: 36px;
   margin-top: 30px;
 }
 
 .extra-life__totals {
-  color: #fff;
-  font-family: 'cantarell';
+  color: var(--white);
+  font-family: var(--cantarell);
   font-size: 30px;
   margin-top: 10px;
 }
 
 .extra-life__progress {
-  background: #fff;
-  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
+  background: var(--white);
+  box-shadow: var(--box-shadow);
   height: 40px;
   padding: 5px 10px;
   width: 250px;
@@ -123,11 +127,11 @@ body {
 .extra-life__progress-percent {
   align-items: center;
   background: #7fd836;
-  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
+  box-shadow: var(--box-shadow);
   color: #1a4c6d;
   display: flex;
   float: left;
-  font-family: 'cantarell';
+  font-family: var(--cantarell);
   font-size: 10px;
   height: 30px;
   justify-content: center;
@@ -140,10 +144,10 @@ body {
 
 .extra-life__button {
   background: #26c2eb;
-  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
-  color: white;
+  box-shadow: var(--box-shadow);
+  color: var(--white);
   cursor: pointer;
-  font-family: 'furoreregular';
+  font-family: var(--furore);
   font-size: 30px;
   height: 50px;
   line-height: 50px;
@@ -158,14 +162,13 @@ body {
   height: 150px;
   line-height: 150px;
   opacity: 0;
+  transition: opacity 0.25s ease-in-out;
   width: 50%;
-  transition: opacity .25s ease-in-out;
 }
 
 .extra-life--component:hover .extra-life__button--component {
   opacity: 1;
 }
-
 
 .extra-life__participant-form {
   display: flex;
@@ -173,17 +176,17 @@ body {
 }
 
 .extra-life__participant-form label {
-  color: #7fd836;
-  font-family: 'furoreregular';
+  color: var(--green);
+  font-family: var(--furore);
   font-size: 60px;
 }
 
 .extra-life__participant-form [type='text'] {
   background: none;
   border: none;
-  border-bottom: 1px solid white;
-  color: #fff;
-  font-family: 'cantarell';
+  border-bottom: 1px solid var(--white);
+  color: var(--white);
+  font-family: var(--cantarell);
   font-size: 60px;
   height: 60px;
   margin-top: 10px;
@@ -201,9 +204,30 @@ body {
   max-width: 50%;
 }
 
+.extra-life__save-status {
+  box-shadow: var(--box-shadow);
+  color: var(--white);
+  display: none;
+  font-family: var(--furore);
+  font-size: 24px;
+  padding: 20px;
+  position: fixed;
+  right: 10px;
+  text-align: center;
+  top: 10px;
+}
+
+.extra-life__save-status--success {
+  background: var(--green);
+}
+
+.extra-life__save-status--error {
+  background-color: #ec1313;
+}
+
 p {
-  color: #fff;
-  font-family: 'cantarell';
+  color: var(--white);
+  font-family: var(--cantarell);
   font-style: italic;
 }
 
@@ -231,7 +255,7 @@ p {
 
 .extra-life--loading {
   align-items: center;
-  color: #fff;
+  color: var(--white);
   display: flex;
   flex-direction: column;
   height: 100vh;
@@ -247,7 +271,7 @@ p {
 }
 .lds-ripple div {
   animation: lds-ripple 1s cubic-bezier(0, 0.2, 0.8, 1) infinite;
-  border: 4px solid #fff;
+  border: 4px solid var(--white);
   border-radius: 50%;
   opacity: 1;
   position: absolute;

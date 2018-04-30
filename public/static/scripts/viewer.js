@@ -38,14 +38,14 @@
 
   function setUI() {
     const donationUrl = `https://www.extra-life.org/index.cfm?fuseaction=donate.participant&participantID=${participant.participantID}`;
-    const calculatedPercent = calcPercent(participant.totalRaisedAmount, participant.fundraisingGoal);
+    const calculatedPercent = calcPercent(participant.sumDonations, participant.fundraisingGoal);
     const link = $('[hook=link]');
 
     link.off('click').on('click', () => {
       window.open(donationUrl, '_blank');
     });
 
-    setText('totalRaisedAmount', participant.totalRaisedAmount);
+    setText('totalRaisedAmount', participant.sumDonations);
     setText('fundraisingGoal', participant.fundraisingGoal);
     setText('year', getCurrentYear());
     setText('goalPercent', calculatedPercent);
@@ -70,7 +70,7 @@
           fetchedParticipant(response);
         })
         .fail(error => console.warn('Error:', error));
-    }, 60000);
+    }, 20000);
   }
 
   /**
@@ -98,9 +98,9 @@
    * Simple function to set the value of an attribute
    * that use the custom hook attribute.
    *
-   * @param {*} hook The name of the hook attribute in template
-   * @param {*} attr The attribute you wish to modify
-   * @param {*} setting desired value of attribute.
+   * @param {string} hook The name of the hook attribute in template
+   * @param {string} attr The attribute you wish to modify
+   * @param {string} setting desired value of attribute.
    *
    * @example
    * setAttribute('test', 'style', 'color:red');
@@ -174,7 +174,7 @@
   }
 
   function getExtraLifeParticipant(participantId) {
-    const extraLifeParticipantUrl = `https://www.extra-life.org/index.cfm?fuseaction=donordrive.participant&participantID=${participantId}&format=json`;
+    const extraLifeParticipantUrl = `https://www.extra-life.org/api/participants/${participantId}`;
     return $.ajax({
       url: extraLifeParticipantUrl
     });

@@ -14,9 +14,17 @@
   <div class="extra-life extra-life--config" id="config">
     <form class="extra-life__participant-form" name="participantForm" hook="form" id="participantForm">
       <label>Participant Id</label>
-      <input type="text" hook="input" name="participantId" autocomplete="false" />
+      <input type="text" hook="input" placeholder="123456" name="participantId" autocomplete="false" required maxlength="6" minlength="6" pattern="^[0-9]{1,6}$" />
       <button type="submit" class="extra-life__button">Submit</button>
     </form>
+  </div>
+
+  <div class="extra-life__save-status extra-life__save-status--success" hook="success">
+    Success! #ftk
+  </div>
+
+  <div class="extra-life__save-status extra-life__save-status--error" hook="error">
+    Error Saving Participant Data. Please try again.
   </div>
 
   <script type="text/javascript" src="./static/scripts/vendor/jquery.min.js"></script>

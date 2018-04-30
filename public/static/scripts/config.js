@@ -20,7 +20,17 @@
         postData(setParticipantUrl, {
           participantId: participantId.val()
         })
+          .done(() => {
+            fade('success');
+          })
+          .fail(() => {
+            fade('error');
+          })
       });
+
+      function fade(hook) {
+        $(`[hook=${hook}]`).fadeIn().delay(15000).fadeOut();
+      }
 
       function postData(url, data) {
         return $.ajax(url, {
