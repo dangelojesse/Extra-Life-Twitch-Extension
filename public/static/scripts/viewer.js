@@ -19,10 +19,8 @@
         getExtraLifeParticipant(response)
           .done(response => {
             fetchedParticipant(response);
-          })
-          .fail(error => console.warn(`Error getting Extra Life Data: ${error}`));
-      })
-      .fail(error => console.warn(`Error getting current participant ID: ${error}`));
+          });
+      });
   }
 
   function fetchedParticipant(fetchedParticipant) {
@@ -68,8 +66,7 @@
       getExtraLifeParticipant(participant.participantID)
         .done(response => {
           fetchedParticipant(response);
-        })
-        .fail(error => console.warn('Error:', error));
+        });
     }, 20000);
   }
 

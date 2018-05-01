@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en" class="mobile">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Extra Life Twitch Extension Viewer View</title>
+
+  <link rel="stylesheet" type="text/css" href="./static/styles/styles.css">
+</head>
+
+<body class="mobile">
+  <!-- Twitch Extension Helper -->
+  <script src="https://extension-files.twitch.tv/helper/v1/twitch-ext.min.js"></script>
+
+  <div class="extra-life extra-life--mobile">
+    <div class="extra-life__mobile-header">
+      <div class="extra-life__image-container">
+        <img hook="avatarImageURL" class="extra-life__participant_image" alt="Extra Life Participant">
+      </div>
+
+      <div class="extra-life__logo" >
+        <img src="./static/images/el-logo.png" alt="Extra Life" />
+      </div>
+    </div>
+
+    <div class="extra-life__year">
+      <span hook="year">0000</span>
+      <span>Goal</span>
+    </div>
+
+    <div class="extra-life__progress">
+      <div class="extra-life__progress-percent" hook="goalPercent">2.2</div>
+    </div>
+
+    <div class="extra-life__totals">
+      $<span hook="totalRaisedAmount">2</span> / $<span hook="fundraisingGoal">2</span>
+    </div>
+
+    <span hook="link" class="extra-life__button">Donate</span>
+
+  </div>
+  <div class="extra-life--loading">
+    <div class="lds-ripple">
+      <div></div>
+      <div></div>
+    </div>
+    <p>Loading&hellip;</p>
+  </div>
+
+  <script type="text/javascript" src="./static/scripts/vendor/jquery.min.js"></script>
+  <script type="text/javascript" src="./static/scripts/viewer.js"></script>
+</body>
+
+</html>
